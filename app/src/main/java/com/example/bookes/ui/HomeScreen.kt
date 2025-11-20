@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Grade
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Notifications
@@ -51,9 +52,9 @@ import com.example.bookes.R
 import com.example.bookes.ui.Data.VehicleData
 
 
-val CardBackground=Color.White.copy(alpha = 0.1f)
+val CardBackground = Color.White.copy(alpha = 0.1f)
 val blue = Color(0xFFADD8E)
-val black = Color(0xFFAADD)
+val gray = Color(0xFF44444E)
 
 
 @Composable
@@ -190,10 +191,10 @@ fun HomeTitle() {
     ) {
         Column {
             Text(
-                text = "Easiest way To ",
-                fontSize = 16.sp,
+                text = "Easiest Way ",
+                fontSize = 24.sp,
                 color = Color.Black,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
@@ -207,7 +208,8 @@ fun HomeTitle() {
             modifier = Modifier
                 .size(50.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .clickable { },
+                .clickable { }
+                .border(1.dp, Color.Black, RoundedCornerShape(16.dp)),
             color = Color.White,
             shadowElevation = 4.dp
         ) {
@@ -231,38 +233,128 @@ fun HomeFilterTabs() {
     var selectedIndexTab by remember { mutableStateOf(0) }
     val tabs = listOf("Type", "Price", "Brand")
 
-    LazyRow(horizontalArrangement =  Arrangement.spacedBy(20.dp)) {
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
         items(tabs.size) { index ->
-            val isSelected = selectedIndexTab ==index
-            val backgroundColor = if (isSelected) blue else CardBackground
-            val textColor =if (isSelected) Color.White else Color.Black
-            val interactionSource = remember { MutableInteractionSource()  }
+            val isSelected = selectedIndexTab == index
+            val backgroundColor = if (isSelected) gray else CardBackground
+            val textColor = if (isSelected) Color.White else Color.Black
+            val interactionSource = remember { MutableInteractionSource() }
 
             Box(modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
                 .background(backgroundColor)
-                .clickable (
+                .clickable(
                     interactionSource = interactionSource,
                     indication = LocalIndication.current,
-                    onClick =  {
+                    onClick = {
                         selectedIndexTab = index
                     }
                 )
-                .border(width = 1.dp, color = blue, shape = RoundedCornerShape(12.dp))
-                .padding(vertical = 10.dp , horizontal = 20.dp)
-            ){
+                .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(12.dp))
+                .padding(vertical = 10.dp, horizontal = 20.dp)
+            ) {
                 Text(text = tabs[index], color = textColor, fontWeight = FontWeight.Medium)
 
             }
 
         }
     }
+
 }
 
+@Preview(showBackground = true)
 @Composable
 fun VehicleSection() {
-//next Time
-    // like Card
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .size(250.dp)
+            .clip(RoundedCornerShape(10.dp))
+
+    ) {
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(150.dp)
+                    .padding(3.dp)
+                    .clip(RoundedCornerShape(15.dp))
+                    .background(Color.Black)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(5.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+
+                    ) {
+                    Box(
+                        modifier =
+                        Modifier
+                            .width(80.dp)
+                            .height(30.dp)
+                            .clip(CircleShape)
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Best Deal",
+                            color = Color.Black,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .size(35.dp)
+                            .clip(CircleShape)
+                            .background(Color.White),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Grade,
+                            contentDescription = "Save",
+                            tint = Color.Black,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+
+
+                }
+
+
+            }
+            Spacer(Modifier.height(10.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "Maybach Exelero", fontSize = 25.sp, fontWeight = FontWeight.Medium)
+                Text(text = "Rp. 100.000.000" , fontSize = 15.sp, fontWeight = FontWeight.Bold)
+
+            }
+
+            Column(
+                modifier = Modifier.padding(vertical = 5.dp , horizontal = 3.dp)
+            ) {
+                Text(text = "Super Car", fontSize = 20.sp, fontWeight = FontWeight.Medium)
+                Text(text = "17-11-2025", fontSize = 15.sp, fontWeight = FontWeight.Medium)
+
+            }
+
+            
+        }
+
+
+
+
+    }
+
 }
 
 @Composable
@@ -270,7 +362,6 @@ fun MenuBar() {
 
 }
 
-@Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(onItemClick = {})
