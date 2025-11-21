@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -279,8 +280,16 @@ fun VehicleSection() {
                     .size(150.dp)
                     .padding(3.dp)
                     .clip(RoundedCornerShape(15.dp))
-                    .background(Color.Black)
+                    .border(3.dp, gray, RoundedCornerShape(15.dp))
+
             ) {
+                Image(
+                    painter = painterResource(id = R.drawable.maybach),
+                    contentDescription = "Car",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -335,22 +344,44 @@ fun VehicleSection() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(text = "Maybach Exelero", fontSize = 25.sp, fontWeight = FontWeight.Medium)
-                Text(text = "Rp. 100.000.000" , fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                Text(text = "Rp. 100.000.000", fontSize = 15.sp, fontWeight = FontWeight.Bold)
 
             }
 
-            Column(
-                modifier = Modifier.padding(vertical = 5.dp , horizontal = 3.dp)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Super Car", fontSize = 20.sp, fontWeight = FontWeight.Medium)
-                Text(text = "17-11-2025", fontSize = 15.sp, fontWeight = FontWeight.Medium)
+                Column(
+                    modifier = Modifier.padding(vertical = 5.dp, horizontal = 5.dp)
+                ) {
+                    Text(text = "Super Car", fontSize = 20.sp, fontWeight = FontWeight.Medium)
+                    Text(text = "17-11-2025", fontSize = 15.sp, fontWeight = FontWeight.Medium)
 
+                }
+                Column (Modifier.padding(end = 5.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .width(50.dp)
+                            .height(30.dp)
+                            .clip(RoundedCornerShape(15.dp))
+                            .background(gray),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Buy",
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
+                        )
+                    }
+                }
             }
 
-            
+
         }
-
-
 
 
     }
