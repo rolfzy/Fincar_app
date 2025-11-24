@@ -11,7 +11,7 @@ import retrofit2.http.Path
 interface ApiService {
     @GET("vehicle")
     suspend fun getAllVehicle(): List<VehicleData>
-    @GET("Vehicle/{id}")
+    @GET("vehicle/{id}")
     suspend fun getVehicleById(@Path("id") id: Int): VehicleData
 
 }

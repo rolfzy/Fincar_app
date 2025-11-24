@@ -20,12 +20,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Grade
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Paid
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -45,10 +50,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
 import com.example.bookes.R
 import com.example.bookes.ui.Data.VehicleData
 
@@ -56,6 +61,12 @@ import com.example.bookes.ui.Data.VehicleData
 val CardBackground = Color.White.copy(alpha = 0.1f)
 val blue = Color(0xFFADD8E)
 val gray = Color(0xFF44444E)
+
+data class MenuItem(
+    val id:String,
+    val icon:ImageVector
+)
+
 
 
 @Composable
@@ -86,8 +97,6 @@ fun HomeScreen(
                     contentPadding = PaddingValues(horizontal = 24.dp)
 
                 ) {
-                    val type = state.items.filter { it.category == "Type" }
-                    val price = state.items.filter { it.category == "Price" }
                     item {
                         Spacer(Modifier.height(20.dp))
                         HomeTopBar()
@@ -102,15 +111,7 @@ fun HomeScreen(
                         Spacer(Modifier.height(20.dp))
                     }
                     item {
-                        VehicleSection()
-                        Spacer(Modifier.height(20.dp))
-                    }
-                    item {
-                        VehicleSection()
-                        Spacer(Modifier.height(20.dp))
-                    }
-                    item {
-                        VehicleSection()
+                        VehicleSection(item = state.items[3])
                         Spacer(Modifier.height(20.dp))
                     }
                     item {
@@ -263,9 +264,9 @@ fun HomeFilterTabs() {
 
 }
 
-@Preview(showBackground = true)
 @Composable
-fun VehicleSection() {
+fun VehicleSection(item: VehicleData) {
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -284,7 +285,7 @@ fun VehicleSection() {
 
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.maybach),
+                    painter = rememberAsyncImagePainter(model = item.image),
                     contentDescription = "Car",
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
@@ -343,7 +344,7 @@ fun VehicleSection() {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = "Maybach Exelero", fontSize = 25.sp, fontWeight = FontWeight.Medium)
+                Text(text = item.name, fontSize = 25.sp, fontWeight = FontWeight.Medium)
                 Text(text = "Rp. 100.000.000", fontSize = 15.sp, fontWeight = FontWeight.Bold)
 
             }
@@ -357,8 +358,8 @@ fun VehicleSection() {
                 Column(
                     modifier = Modifier.padding(vertical = 5.dp, horizontal = 5.dp)
                 ) {
-                    Text(text = "Super Car", fontSize = 20.sp, fontWeight = FontWeight.Medium)
-                    Text(text = "17-11-2025", fontSize = 15.sp, fontWeight = FontWeight.Medium)
+                    Text(text = item.type, fontSize = 20.sp, fontWeight = FontWeight.Medium)
+                    Text(text = item.year, fontSize = 15.sp, fontWeight = FontWeight.Medium)
 
                 }
                 Column (Modifier.padding(end = 5.dp)) {
@@ -390,7 +391,55 @@ fun VehicleSection() {
 
 @Composable
 fun MenuBar() {
+    val menuList = listOf(
+        MenuItem("Home",Icons.Default.Home),
+        MenuItem("Search",Icons.Default.Search),
+        MenuItem("Shop",Icons.Default.DirectionsCar),
+        MenuItem("Wallet",Icons.Default.Paid),
+        MenuItem("Setting",Icons.Default.Settings),
+    )
 
+    var selectedMenu by remember { mutableStateOf("home") }
+    Box(
+        modifier = Modifier.fillMaxWidth()
+            .height(110.dp)
+            .padding(16.dp)
+            .border(width = 2.dp, shape = CircleShape, color = Color.Black)
+            .clip(CircleShape)
+            .background(Color.White),
+        contentAlignment = Alignment.Center
+    ){
+        LazyRow(
+            modifier = Modifier.fillMaxWidth()
+                .padding(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            items(menuList) { item ->
+
+                val isSelected = selectedMenu == item.id
+                val backgroundColor = if (isSelected) Color.Yellow else Color.Black
+                val iconColor = if (isSelected) Color.Black else Color.White
+
+                Box(
+                    modifier = Modifier.size(55.dp)
+                        .clip(CircleShape)
+                        .clickable {
+                            selectedMenu = item.id
+                        }
+                        .background(backgroundColor),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = item.icon,
+                        contentDescription = item.id,
+                        tint = iconColor)
+
+                }
+            }
+
+        }
+    }
 }
 
 @Composable

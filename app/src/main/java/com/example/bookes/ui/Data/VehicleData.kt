@@ -9,10 +9,12 @@ data class VehicleData(
     @SerialName("name")
     val name: String,
     @SerialName("type")
-    val category : String,
     val type: String,
+    @SerialName("year")
+    val year: String,
     @SerialName("price")
     val price: Double,
     @SerialName("image")
     val image: String
+
 )
