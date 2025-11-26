@@ -5,16 +5,17 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class VehicleData(
-    val id: Int,
+    @SerialName("id")
+    val id: String? = null,
     @SerialName("name")
-    val name: String,
+    val name: String? = null ,
     @SerialName("type")
-    val type: String,
+    val type: String? = null,
     @SerialName("year")
-    val year: String,
+    val year: String? = null,
     @SerialName("price")
-    val price: Double,
+    val price: String? = null,
     @SerialName("image")
-    val image: String
+    val image: String? = null
 
 )

@@ -5,6 +5,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -12,7 +13,7 @@ interface ApiService {
     @GET("vehicle")
     suspend fun getAllVehicle(): List<VehicleData>
     @GET("vehicle/{id}")
-    suspend fun getVehicleById(@Path("id") id: Int): VehicleData
+    suspend fun getVehicleById(@Path("id") id: String): VehicleData
 
 }
 
@@ -23,7 +24,7 @@ object RetrofitClient{
     val instance: ApiService by lazy {
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         retrofit.create(ApiService::class.java)

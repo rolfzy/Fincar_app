@@ -34,6 +34,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,6 +51,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -60,13 +62,14 @@ import com.example.bookes.ui.Data.VehicleData
 
 val CardBackground = Color.White.copy(alpha = 0.1f)
 val blue = Color(0xFFADD8E)
-val gray = Color(0xFF44444E)
+val gray = Color(0xFFF8FAFC)
+val black = Color(0xFF373A40)
+val greenlight = Color(0xFFEEEEEE)
 
 data class MenuItem(
-    val id:String,
-    val icon:ImageVector
+    val id: String,
+    val icon: ImageVector
 )
-
 
 
 @Composable
@@ -76,46 +79,49 @@ fun HomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.White),
-        contentAlignment = Alignment.Center
-    ) {
-        when (val state = uiState) {
-            is VehicleUiState.Loading -> {
-                CircularProgressIndicator()
-            }
+    Scaffold(bottomBar = { MenuBar() }, containerColor = greenlight) { innerpadding ->
 
-            is VehicleUiState.Error -> {
-                Text(text = "Kesalahan : ${state.message}", color = Color.Red)
-            }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerpadding)
+                .background(greenlight),
+            contentAlignment = Alignment.Center
+        ) {
+            when (val state = uiState) {
+                is VehicleUiState.Loading -> {
+                    CircularProgressIndicator()
+                }
 
-            is VehicleUiState.Succes -> {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(horizontal = 24.dp)
+                is VehicleUiState.Error -> {
+                    Text(text = "Kesalahan : ${state.message}", color = Color.Red)
+                    println(state.message)
+                }
 
-                ) {
-                    item {
-                        Spacer(Modifier.height(20.dp))
-                        HomeTopBar()
-                        Spacer(Modifier.height(20.dp))
-                    }
-                    item {
-                        HomeTitle()
-                        Spacer(Modifier.height(20.dp))
-                    }
-                    item {
-                        HomeFilterTabs()
-                        Spacer(Modifier.height(20.dp))
-                    }
-                    item {
-                        VehicleSection(item = state.items[3])
-                        Spacer(Modifier.height(20.dp))
-                    }
-                    item {
-                        MenuBar()
+                is VehicleUiState.Succes -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(horizontal = 24.dp)
+
+                    ) {
+                        item {
+                            Spacer(Modifier.height(20.dp))
+                            HomeTopBar()
+                            Spacer(Modifier.height(20.dp))
+                        }
+                        item {
+                            HomeTitle()
+                            Spacer(Modifier.height(20.dp))
+                        }
+                        item {
+                            HomeFilterTabs()
+                            Spacer(Modifier.height(20.dp))
+                        }
+                        items(state.items) { vehicle ->
+                            VehicleSection(item = vehicle)
+                            Spacer(Modifier.height(20.dp))
+                        }
+
                     }
                 }
 
@@ -132,7 +138,7 @@ fun HomeTopBar() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 16.dp),
+            .padding(horizontal = 5.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         CircularIconButton(
@@ -175,7 +181,7 @@ fun CircularIconButton(icon: ImageVector, onClick: () -> Unit) {
         Icon(
             imageVector = icon,
             contentDescription = null,
-            tint = Color.Black,
+            tint = black,
             modifier = Modifier.size(24.dp)
         )
     }
@@ -187,23 +193,23 @@ fun HomeTitle() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 20.dp),
+            .padding(horizontal = 5.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
             Text(
-                text = "Easiest Way ",
-                fontSize = 24.sp,
-                color = Color.Black,
+                text = "Easiest Way To",
+                fontSize = 28.sp,
+                color = black,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Finding Car",
-                fontSize = 24.sp,
+                text = "Finding Your Car",
+                fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
+                color = black
             )
         }
         Surface(
@@ -211,7 +217,7 @@ fun HomeTitle() {
                 .size(50.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .clickable { }
-                .border(1.dp, Color.Black, RoundedCornerShape(16.dp)),
+                .border(1.dp, black, RoundedCornerShape(16.dp)),
             color = Color.White,
             shadowElevation = 4.dp
         ) {
@@ -220,7 +226,7 @@ fun HomeTitle() {
                 Icon(
                     imageVector = Icons.Default.Search,
                     contentDescription = "Search",
-                    tint = Color.Black,
+                    tint = black,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -238,8 +244,8 @@ fun HomeFilterTabs() {
     LazyRow(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
         items(tabs.size) { index ->
             val isSelected = selectedIndexTab == index
-            val backgroundColor = if (isSelected) gray else CardBackground
-            val textColor = if (isSelected) Color.White else Color.Black
+            val backgroundColor = if (isSelected) black else CardBackground
+            val textColor = if (isSelected) Color.White else black
             val interactionSource = remember { MutableInteractionSource() }
 
             Box(modifier = Modifier
@@ -252,7 +258,7 @@ fun HomeFilterTabs() {
                         selectedIndexTab = index
                     }
                 )
-                .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(12.dp))
+                .border(width = 1.dp, color = black, shape = RoundedCornerShape(12.dp))
                 .padding(vertical = 10.dp, horizontal = 20.dp)
             ) {
                 Text(text = tabs[index], color = textColor, fontWeight = FontWeight.Medium)
@@ -272,6 +278,8 @@ fun VehicleSection(item: VehicleData) {
             .fillMaxWidth()
             .size(250.dp)
             .clip(RoundedCornerShape(10.dp))
+            .background(Color.White)
+            .border(2.dp, Color.White, RoundedCornerShape(10.dp))
 
     ) {
         Column {
@@ -279,9 +287,7 @@ fun VehicleSection(item: VehicleData) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .size(150.dp)
-                    .padding(3.dp)
                     .clip(RoundedCornerShape(15.dp))
-                    .border(3.dp, gray, RoundedCornerShape(15.dp))
 
             ) {
                 Image(
@@ -310,7 +316,7 @@ fun VehicleSection(item: VehicleData) {
                     ) {
                         Text(
                             text = "Best Deal",
-                            color = Color.Black,
+                            color = black,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -326,7 +332,7 @@ fun VehicleSection(item: VehicleData) {
                         Icon(
                             imageVector = Icons.Default.Grade,
                             contentDescription = "Save",
-                            tint = Color.Black,
+                            tint = black,
                             modifier = Modifier.size(24.dp)
                         )
                     }
@@ -344,8 +350,22 @@ fun VehicleSection(item: VehicleData) {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = item.name, fontSize = 25.sp, fontWeight = FontWeight.Medium)
-                Text(text = "Rp. 100.000.000", fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                item.name?.let {
+                    Text(
+                        text = it,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = black
+                    )
+                }
+                item.price?.let {
+                    Text(
+                        text = it,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = black
+                    )
+                }
 
             }
 
@@ -356,19 +376,29 @@ fun VehicleSection(item: VehicleData) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(
-                    modifier = Modifier.padding(vertical = 5.dp, horizontal = 5.dp)
+                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 5.dp)
                 ) {
-                    Text(text = item.type, fontSize = 20.sp, fontWeight = FontWeight.Medium)
-                    Text(text = item.year, fontSize = 15.sp, fontWeight = FontWeight.Medium)
+                    Text(
+                        text = item.type.toString(),
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = black
+                    )
+                    Text(
+                        text = item.year.toString(),
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = black
+                    )
 
                 }
-                Column (Modifier.padding(end = 5.dp)) {
+                Column(Modifier.padding(end = 5.dp)) {
                     Box(
                         modifier = Modifier
                             .width(50.dp)
                             .height(30.dp)
                             .clip(RoundedCornerShape(15.dp))
-                            .background(gray),
+                            .background(black),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -392,25 +422,27 @@ fun VehicleSection(item: VehicleData) {
 @Composable
 fun MenuBar() {
     val menuList = listOf(
-        MenuItem("Home",Icons.Default.Home),
-        MenuItem("Search",Icons.Default.Search),
-        MenuItem("Shop",Icons.Default.DirectionsCar),
-        MenuItem("Wallet",Icons.Default.Paid),
-        MenuItem("Setting",Icons.Default.Settings),
+        MenuItem("Home", Icons.Default.Home),
+        MenuItem("Search", Icons.Default.Search),
+        MenuItem("Shop", Icons.Default.DirectionsCar),
+        MenuItem("Wallet", Icons.Default.Paid),
+        MenuItem("Setting", Icons.Default.Settings),
     )
 
     var selectedMenu by remember { mutableStateOf("home") }
     Box(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .height(110.dp)
             .padding(16.dp)
-            .border(width = 2.dp, shape = CircleShape, color = Color.Black)
+            .border(width = 2.dp, shape = CircleShape, color = black)
             .clip(CircleShape)
             .background(Color.White),
         contentAlignment = Alignment.Center
-    ){
+    ) {
         LazyRow(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(10.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -418,11 +450,12 @@ fun MenuBar() {
             items(menuList) { item ->
 
                 val isSelected = selectedMenu == item.id
-                val backgroundColor = if (isSelected) Color.Yellow else Color.Black
-                val iconColor = if (isSelected) Color.Black else Color.White
+                val backgroundColor = if (isSelected) Color.Yellow else black
+                val iconColor = if (isSelected) black else Color.White
 
                 Box(
-                    modifier = Modifier.size(55.dp)
+                    modifier = Modifier
+                        .size(55.dp)
                         .clip(CircleShape)
                         .clickable {
                             selectedMenu = item.id
@@ -433,7 +466,8 @@ fun MenuBar() {
                     Icon(
                         imageVector = item.icon,
                         contentDescription = item.id,
-                        tint = iconColor)
+                        tint = iconColor
+                    )
 
                 }
             }
@@ -442,6 +476,7 @@ fun MenuBar() {
     }
 }
 
+@Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(onItemClick = {})
