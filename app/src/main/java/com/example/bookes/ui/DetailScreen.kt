@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.bookes.R
 
+
 val greenNokia = Color(0xFF94BF6F)
 val greenlight = Color(0xFFEEEEEE)
 val CardBackground = Color.White.copy(alpha = 0.1f)
@@ -41,7 +43,8 @@ val CardBackground = Color.White.copy(alpha = 0.1f)
 @Preview(showBackground = true)
 @Composable
 fun DetailScreen() {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxWidth()
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -92,49 +95,71 @@ fun DetailScreen() {
                 contentDescription = "supercar",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
-                    .size(300.dp)
+                    .size(330.dp)
                     .offset(y = 80.dp)
             )
         }
+        Spacer(modifier = Modifier.height(15.dp))
         Box(
             modifier =
             Modifier
                 .fillMaxWidth()
-                .height(500.dp)
+                .height(300.dp)
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(300.dp)
-                    .padding(15.dp)
+                    .padding(top = 15.dp, bottom = 5.dp, start = 15.dp, end = 15.dp)
                     .clip(RoundedCornerShape(30.dp))
                     .background(greenlight)
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(text = "Super Car ", fontSize = 20.sp, fontWeight = FontWeight.SemiBold)
 
-                    Box(
-                        modifier = Modifier.size(30.dp)
-                            .clip(CircleShape)
-                            .background(Color.White),
-                        contentAlignment = Alignment.Center
+                Column(modifier = Modifier.padding(start = 15.dp, bottom = 5.dp)) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(5.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Map,
-                            contentDescription = "Maps",
-                            tint = Color.Black
+                        Text(
+                            text = "Super Car ",
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.SemiBold
                         )
+
+                        Box(
+                            modifier = Modifier
+                                .size(30.dp)
+                                .clip(CircleShape)
+                                .background(Color.White),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Map,
+                                contentDescription = "Maps",
+                                tint = Color.Black
+                            )
+                        }
                     }
+                    Text(
+                        "50000$",
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.padding(bottom = 5.dp)
+                    )
+                    Text(
+                        "The Maybach Exelero is a one-of-a-kind luxury sports car created in 2004, blending the elegance of Maybach’s design language with the raw power of a hypercar. Commissioned by Fulda, a subsidiary of Goodyear, the Exelero was built to test high-performance tires under extreme conditions, and it succeeded in doing so with style. Powered by a massive 6.0-liter twin‑turbo V12 engine that produces around 700 horsepower, the car can reach speeds of more than 350 km/h (217 mph) ",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
 
             }
         }
 
+            MenuBar()
     }
+
 
 }

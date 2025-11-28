@@ -24,13 +24,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Grade
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Paid
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -60,16 +56,10 @@ import com.example.bookes.R
 import com.example.bookes.ui.Data.VehicleData
 
 
-val CardBackground = Color.White.copy(alpha = 0.1f)
+val CardBackgrounds = Color.White.copy(alpha = 0.1f)
 val blue = Color(0xFFADD8E)
 val gray = Color(0xFFF8FAFC)
 val black = Color(0xFF373A40)
-val greenlight = Color(0xFFEEEEEE)
-
-data class MenuItem(
-    val id: String,
-    val icon: ImageVector
-)
 
 
 @Composable
@@ -419,62 +409,6 @@ fun VehicleSection(item: VehicleData) {
 
 }
 
-@Composable
-fun MenuBar() {
-    val menuList = listOf(
-        MenuItem("Home", Icons.Default.Home),
-        MenuItem("Search", Icons.Default.Search),
-        MenuItem("Shop", Icons.Default.DirectionsCar),
-        MenuItem("Wallet", Icons.Default.Paid),
-        MenuItem("Setting", Icons.Default.Settings),
-    )
-
-    var selectedMenu by remember { mutableStateOf("home") }
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(110.dp)
-            .padding(16.dp)
-            .border(width = 2.dp, shape = CircleShape, color = black)
-            .clip(CircleShape)
-            .background(Color.White),
-        contentAlignment = Alignment.Center
-    ) {
-        LazyRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            items(menuList) { item ->
-
-                val isSelected = selectedMenu == item.id
-                val backgroundColor = if (isSelected) Color.Yellow else black
-                val iconColor = if (isSelected) black else Color.White
-
-                Box(
-                    modifier = Modifier
-                        .size(55.dp)
-                        .clip(CircleShape)
-                        .clickable {
-                            selectedMenu = item.id
-                        }
-                        .background(backgroundColor),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(
-                        imageVector = item.icon,
-                        contentDescription = item.id,
-                        tint = iconColor
-                    )
-
-                }
-            }
-
-        }
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
