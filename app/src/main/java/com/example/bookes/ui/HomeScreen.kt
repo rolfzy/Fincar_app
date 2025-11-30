@@ -61,7 +61,6 @@ val blue = Color(0xFFADD8E)
 val gray = Color(0xFFF8FAFC)
 val black = Color(0xFF373A40)
 
-
 @Composable
 fun HomeScreen(
     onItemClick: (VehicleData) -> Unit,
@@ -410,7 +409,6 @@ fun VehicleSection(item: VehicleData) {
 }
 
 
-@Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     HomeScreen(onItemClick = {})
