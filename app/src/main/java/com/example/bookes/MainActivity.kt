@@ -61,28 +61,22 @@ fun AppNavigation() {
 
             DetailScreen(
                 itemId = itemId?.toInt() ?: 0,
-                onNavigateBack = { navController.popBackStack() },
-                onItemClick = {
-                    navController.navigate("maps_router/${itemId}")
+                onNavigateBack = { navController.popBackStack() }, onItemClick = {
+                    navController.navigate("maps_router")
                 }
-
 
             )
         }
 
 
-        composable(route = "maps_router/{itemId}", arguments = listOf(navArgument("itemId") {
-            type = NavType.StringType
-        })) { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getString("itemId")
-            MapsScreen(
-                itemId = itemId?.toInt() ?: 0,
-                onNavigateBack = { navController.popBackStack() },
-                onItemClick = { item ->
-                    navController.navigate("detail_router/${item.id}")
-                }
-            )
+        composable(route = "maps_router") {
+            MapsScreen(onItemClick = { item ->
+                navController.navigate("detail_router/${item.id}")
+            }, onNavigateBack = {
+                navController.popBackStack()
+            })
         }
+
     }
 }
 

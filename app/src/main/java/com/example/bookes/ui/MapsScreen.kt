@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -33,15 +34,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bookes.ui.Data.VehicleData
-import com.example.bookes.ui.ViewModel.DetailUiState
-import com.example.bookes.ui.ViewModel.DetailViewModel
-import com.example.bookes.ui.ViewModel.DetailViewModelFactory
 import com.example.bookes.ui.ViewModel.HomeViewModel
 import com.example.bookes.ui.ViewModel.VehicleUiState
 
 @Composable
-fun MapsScreen(itemId: Int, onItemClick: () -> Unit, onNavigateBack: () -> Unit,
-               viewModel: HomeViewModel = viewModel()) {
+fun MapsScreen(
+     onItemClick: (VehicleData) -> Unit, onNavigateBack: () -> Unit,
+    viewModel: HomeViewModel = viewModel()
+) {
 
 
     val uiState by viewModel.uiState.collectAsState()
@@ -55,25 +55,31 @@ fun MapsScreen(itemId: Int, onItemClick: () -> Unit, onNavigateBack: () -> Unit,
     ) {
         when (val state = uiState) {
             is VehicleUiState.Loading -> CircularProgressIndicator()
-            is VehicleUiState.Error -> Text(text = "Kesalahan : ${state.message}", color = Color.Red)
+            is VehicleUiState.Error -> Text(
+                text = "Kesalahan : ${state.message}",
+                color = Color.Red
+            )
+
             is VehicleUiState.Succes ->
                 mapDetailContent(
-                    item =  ,
-                    onItemClick = onItemClick,
+                    vehicleList = state.items,
+                    onItemClick = onItemClick ,
                     onNavigateBack = onNavigateBack
                 )
 
 
-            }
         }
-
     }
-
 
 }
 
+
 @Composable
-fun mapDetailContent(item: VehicleData, onItemClick: () -> Unit, onNavigateBack: () -> Unit) {
+fun mapDetailContent(
+    vehicleList: List<VehicleData>,
+    onItemClick: (VehicleData) -> Unit,
+    onNavigateBack: () -> Unit
+) {
     val backInteractionSource = remember { MutableInteractionSource() }
     val goInteractionSource = remember { MutableInteractionSource() }
     Column(
@@ -135,7 +141,7 @@ fun mapDetailContent(item: VehicleData, onItemClick: () -> Unit, onNavigateBack:
                     .padding(15.dp),
                 verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {
-                item() {
+                items(vehicleList) { item ->
                     Box(
                         modifier = Modifier
                             .border(
@@ -145,7 +151,7 @@ fun mapDetailContent(item: VehicleData, onItemClick: () -> Unit, onNavigateBack:
                             )
                             .clip(RoundedCornerShape(10.dp))
                     ) {
-                        VehicleSection(item = item, onItemClick = {_->onItemClick})
+                        VehicleSection(item = item, onItemClick = { onItemClick(item) })
                     }
 
                 }
