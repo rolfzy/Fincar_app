@@ -1,4 +1,4 @@
-package com.example.bookes.ui
+package com.example.bookes.ui.ViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,16 +19,16 @@ class HomeViewModel : ViewModel() {
     val uiState: StateFlow<VehicleUiState> = _uiState
 
     init {
-        fetchBookesData()
+        fetchVehicleData()
     }
 
-    fun fetchBookesData() {
+    fun fetchVehicleData() {
         _uiState.value = VehicleUiState.Loading
         viewModelScope.launch {
             try {
                 val items = RetrofitClient.instance.getAllVehicle()
 
-                _uiState.value =VehicleUiState.Succes(items)
+                _uiState.value = VehicleUiState.Succes(items)
             }catch (e:Exception){
                 _uiState.value = VehicleUiState.Error(e.message ?: "Unknown error")
             }

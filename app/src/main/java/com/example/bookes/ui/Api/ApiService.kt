@@ -13,7 +13,7 @@ interface ApiService {
     @GET("vehicle")
     suspend fun getAllVehicle(): List<VehicleData>
     @GET("vehicle/{id}")
-    suspend fun getVehicleById(@Path("id") id: String): VehicleData
+    suspend fun getVehicleById(@Path("id") id: Int): VehicleData
 
 }
 

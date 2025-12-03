@@ -47,13 +47,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.bookes.R
 import com.example.bookes.ui.Data.VehicleData
+import com.example.bookes.ui.ViewModel.HomeViewModel
+import com.example.bookes.ui.ViewModel.VehicleUiState
 
 
 val CardBackgrounds = Color.White.copy(alpha = 0.1f)
@@ -107,7 +108,7 @@ fun HomeScreen(
                             Spacer(Modifier.height(20.dp))
                         }
                         items(state.items) { vehicle ->
-                            VehicleSection(item = vehicle)
+                            VehicleSection(item = vehicle, onItemClick = onItemClick)
                             Spacer(Modifier.height(20.dp))
                         }
 
@@ -260,7 +261,7 @@ fun HomeFilterTabs() {
 }
 
 @Composable
-fun VehicleSection(item: VehicleData) {
+fun VehicleSection(item: VehicleData, onItemClick: (VehicleData) -> Unit) {
 
     Box(
         modifier = Modifier
@@ -269,6 +270,7 @@ fun VehicleSection(item: VehicleData) {
             .clip(RoundedCornerShape(10.dp))
             .background(Color.White)
             .border(2.dp, Color.White, RoundedCornerShape(10.dp))
+            .clickable { onItemClick(item) }
 
     ) {
         Column {
