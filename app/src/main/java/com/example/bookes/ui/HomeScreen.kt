@@ -30,7 +30,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.bookes.R
 import com.example.bookes.ui.Data.VehicleData
@@ -64,64 +64,61 @@ val black = Color(0xFF373A40)
 
 @Composable
 fun HomeScreen(
+    navController: NavController,
     onItemClick: (VehicleData) -> Unit,
     viewModel: HomeViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    Scaffold(bottomBar = { MenuBar() }, containerColor = greenlight) { innerpadding ->
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerpadding)
-                .background(greenlight),
-            contentAlignment = Alignment.Center
-        ) {
-            when (val state = uiState) {
-                is VehicleUiState.Loading -> {
-                    CircularProgressIndicator()
-                }
-
-                is VehicleUiState.Error -> {
-                    Text(text = "Kesalahan : ${state.message}", color = Color.Red)
-                    println(state.message)
-                }
-
-                is VehicleUiState.Succes -> {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(horizontal = 24.dp)
-
-                    ) {
-                        item {
-                            Spacer(Modifier.height(20.dp))
-                            HomeTopBar()
-                            Spacer(Modifier.height(20.dp))
-                        }
-                        item {
-                            HomeTitle()
-                            Spacer(Modifier.height(20.dp))
-                        }
-                        item {
-                            HomeFilterTabs()
-                            Spacer(Modifier.height(20.dp))
-                        }
-                        items(state.items) { vehicle ->
-                            VehicleSection(item = vehicle, onItemClick = onItemClick)
-                            Spacer(Modifier.height(20.dp))
-                        }
-
-                    }
-                }
-
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(greenlight),
+        contentAlignment = Alignment.Center
+    ) {
+        when (val state = uiState) {
+            is VehicleUiState.Loading -> {
+                CircularProgressIndicator()
             }
+
+            is VehicleUiState.Error -> {
+                Text(text = "Kesalahan : ${state.message}", color = Color.Red)
+                println(state.message)
+            }
+
+            is VehicleUiState.Succes -> {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(horizontal = 24.dp)
+
+                ) {
+                    item {
+                        Spacer(Modifier.height(20.dp))
+                        HomeTopBar()
+                        Spacer(Modifier.height(20.dp))
+                    }
+                    item {
+                        HomeTitle()
+                        Spacer(Modifier.height(20.dp))
+                    }
+                    item {
+                        HomeFilterTabs()
+                        Spacer(Modifier.height(20.dp))
+                    }
+                    items(state.items) { vehicle ->
+                        VehicleSection(item = vehicle, onItemClick = onItemClick)
+                        Spacer(Modifier.height(20.dp))
+                    }
+
+                }
+            }
+
         }
-
-
     }
 
+
 }
+
 
 @Composable
 fun HomeTopBar() {
@@ -413,6 +410,6 @@ fun VehicleSection(item: VehicleData, onItemClick: (VehicleData) -> Unit) {
 
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(onItemClick = {})
+
 }
 

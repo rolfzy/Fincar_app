@@ -232,7 +232,6 @@ fun carDetailContent(
             }
         }
 
-        MenuBar()
     }
 
 }

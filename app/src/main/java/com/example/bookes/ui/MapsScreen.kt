@@ -39,7 +39,7 @@ import com.example.bookes.ui.ViewModel.VehicleUiState
 
 @Composable
 fun MapsScreen(
-     onItemClick: (VehicleData) -> Unit, onNavigateBack: () -> Unit,
+    onItemClick: (VehicleData) -> Unit, onNavigateBack: () -> Unit,
     viewModel: HomeViewModel = viewModel()
 ) {
 
@@ -63,7 +63,7 @@ fun MapsScreen(
             is VehicleUiState.Succes ->
                 mapDetailContent(
                     vehicleList = state.items,
-                    onItemClick = onItemClick ,
+                    onItemClick = onItemClick,
                     onNavigateBack = onNavigateBack
                 )
 
@@ -157,7 +157,6 @@ fun mapDetailContent(
                 }
             }
         }
-
 
     }
 }

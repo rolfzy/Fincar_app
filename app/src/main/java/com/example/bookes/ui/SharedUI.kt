@@ -21,33 +21,36 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 data class MenuItem(
     val id: String,
-    val icon: ImageVector
+    val icon: ImageVector,
+    val route: String,
+    val relatedRoutes : List<String> = emptyList()
 )
 
 
 @Composable
-fun MenuBar() {
+fun MenuBar(navController: NavController) {
     val menuList = listOf(
-        MenuItem("Home", Icons.Default.Home),
-        MenuItem("Search", Icons.Default.Search),
-        MenuItem("Shop", Icons.Default.DirectionsCar),
-        MenuItem("Wallet", Icons.Default.Paid),
-        MenuItem("Setting", Icons.Default.Settings),
+        MenuItem("Home", Icons.Default.Home,"home_router" ),
+        MenuItem("Search", Icons.Default.Search,"maps_router"),
+        MenuItem("car", Icons.Default.DirectionsCar,"detail_router/3", relatedRoutes = listOf("detail_router")),
+        MenuItem("Wallet", Icons.Default.Paid,"null"),
+        MenuItem("Setting", Icons.Default.Settings,"null"),
     )
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
-    var selectedMenu by remember { mutableStateOf("home") }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -67,18 +70,27 @@ fun MenuBar() {
         ) {
             items(menuList) { item ->
 
-                val isSelected = selectedMenu == item.id
-                val backgroundColor = if (isSelected) Color.Yellow else black
-                val iconColor = if (isSelected) black else Color.White
+                val isSelected = currentRoute?.let { route ->
+                    route.startsWith(item.route) || item.relatedRoutes.any() {route.startsWith(it)}
+                } == true
+                val backgroundColor = if (isSelected == true) Color.Yellow else black
+                val iconColor = if (isSelected == true) black else Color.White
 
                 Box(
                     modifier = Modifier
                         .size(55.dp)
                         .clip(CircleShape)
+                        .background(backgroundColor)
                         .clickable {
-                            selectedMenu = item.id
+                            navController.navigate(item.route){
+                                popUpTo(navController.graph.startDestinationId){
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
                         }
-                        .background(backgroundColor),
+                        ,
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
