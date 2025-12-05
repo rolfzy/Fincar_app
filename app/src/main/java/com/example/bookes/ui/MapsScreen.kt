@@ -31,11 +31,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bookes.ui.Data.VehicleData
 import com.example.bookes.ui.ViewModel.HomeViewModel
 import com.example.bookes.ui.ViewModel.VehicleUiState
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
 fun MapsScreen(
@@ -43,7 +51,10 @@ fun MapsScreen(
     viewModel: HomeViewModel = viewModel()
 ) {
 
-
+    val bandung = LatLng(-6.9174639, 107.6191228)
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(bandung, 10f)
+    }
     val uiState by viewModel.uiState.collectAsState()
 
 
@@ -53,14 +64,38 @@ fun MapsScreen(
             .background(greenlight),
         contentAlignment = Alignment.TopCenter
     ) {
+        GoogleMap(
+            modifier = Modifier.fillMaxSize(),
+            cameraPositionState = cameraPositionState
+        ){
+            if (uiState is VehicleUiState.Succes){
+                val items = (uiState as VehicleUiState.Succes).items
+
+                items.forEach{vehicle ->
+                    val lat = vehicle.lat?.toDoubleOrNull() ?: -6.9
+                    val lng = vehicle.lng?.toDoubleOrNull() ?: 107.6
+
+                    Marker(
+                        state = MarkerState(position = LatLng(lat,lng)),
+                        title = vehicle.name,
+                        snippet = "Harga: ${vehicle.price}",
+                        icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)
+
+                    )
+                }
+            }
+        }
         when (val state = uiState) {
-            is VehicleUiState.Loading -> CircularProgressIndicator()
+            is VehicleUiState.Loading -> CircularProgressIndicator(Modifier.align(Alignment.Center))
             is VehicleUiState.Error -> Text(
                 text = "Kesalahan : ${state.message}",
-                color = Color.Red
+                Modifier.align(Alignment.Center),
+                color = Color.Red,
+
             )
 
             is VehicleUiState.Succes ->
+
                 mapDetailContent(
                     vehicleList = state.items,
                     onItemClick = onItemClick,
@@ -133,7 +168,7 @@ fun mapDetailContent(
             modifier = Modifier
                 .fillMaxSize()
                 .clip(RoundedCornerShape(topStart = 35.dp, topEnd = 35.dp))
-                .background(Color.White)
+                .background(CardBackground)
         ) {
             LazyColumn(
                 modifier = Modifier
@@ -159,4 +194,10 @@ fun mapDetailContent(
         }
 
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun mapScreenPreview(){
+    mapDetailContent(vehicleList = listOf(), onItemClick = { /*TODO*/ }, onNavigateBack = { /*TODO*/ })
 }

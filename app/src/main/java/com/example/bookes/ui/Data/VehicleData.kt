@@ -16,6 +16,9 @@ data class VehicleData(
     @SerialName("price")
     val price: String,
     @SerialName("image")
-    val image: String
+    val image: String,
+    val lat: String? = null,
+    val lng: String? = null,
+
 
 )

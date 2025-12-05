@@ -27,6 +27,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -58,7 +61,8 @@ fun MenuBar(navController: NavController) {
             .padding(16.dp)
             .border(width = 2.dp, shape = CircleShape, color = black)
             .clip(CircleShape)
-            .background(Color.White),
+            .background(CardBackground)
+            ,
         contentAlignment = Alignment.Center
     ) {
         LazyRow(
@@ -104,4 +108,11 @@ fun MenuBar(navController: NavController) {
 
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MenuBarPreview() {
+    MenuBar(navController = NavController(LocalContext.current))
+
 }
