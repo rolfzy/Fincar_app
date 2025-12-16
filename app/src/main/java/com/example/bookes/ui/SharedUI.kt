@@ -77,7 +77,7 @@ fun MenuBar(navController: NavController) {
                 val isSelected = currentRoute?.let { route ->
                     route.startsWith(item.route) || item.relatedRoutes.any() {route.startsWith(it)}
                 } == true
-                val backgroundColor = if (isSelected == true) Color.Yellow else black
+                val backgroundColor = if (isSelected == true) Gold else black
                 val iconColor = if (isSelected == true) black else Color.White
 
                 Box(

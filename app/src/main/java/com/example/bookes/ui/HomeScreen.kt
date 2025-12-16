@@ -24,14 +24,20 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Grade
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -44,8 +50,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -60,7 +68,8 @@ import com.example.bookes.ui.ViewModel.VehicleUiState
 val CardBackgrounds = Color.White.copy(alpha = 0.1f)
 val blue = Color(0xFFADD8E)
 val gray = Color(0xFFF8FAFC)
-val black = Color(0xFF373A40)
+val black = Color(0xFF1A1A1A)
+val Gold = Color(0xFFC6A87D)
 
 @Composable
 fun HomeScreen(
@@ -161,7 +170,7 @@ fun CircularIconButton(icon: ImageVector, onClick: () -> Unit) {
         modifier = Modifier
             .size(48.dp)
             .clip(CircleShape)
-            .background(Color.White)
+            .background(Gold)
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
@@ -304,7 +313,7 @@ fun VehicleSection(item: VehicleData, onItemClick: (VehicleData) -> Unit) {
                     ) {
                         Text(
                             text = "Best Deal",
-                            color = black,
+                            color = Gold,
                             fontSize = 13.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -386,7 +395,7 @@ fun VehicleSection(item: VehicleData, onItemClick: (VehicleData) -> Unit) {
                             .width(50.dp)
                             .height(30.dp)
                             .clip(RoundedCornerShape(15.dp))
-                            .background(black),
+                            .background(Gold),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -407,9 +416,11 @@ fun VehicleSection(item: VehicleData, onItemClick: (VehicleData) -> Unit) {
 
 }
 
-
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-
+HomeScreen(navController = (NavController(LocalContext.current)), onItemClick = {  })
 }
+
 

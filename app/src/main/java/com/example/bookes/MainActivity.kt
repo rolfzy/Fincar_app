@@ -105,3 +105,7 @@ fun AppNavigation() {
     }
 }
 
+@Composable
+fun mainPreview(){
+    AppNavigation()
+}
