@@ -18,7 +18,7 @@ interface ApiService {
 }
 
 object RetrofitClient{
-    private const val BASE_URL = "https://691afc5f2d8d78557570fd5c.mockapi.io/Vehicle/"
+    private const val BASE_URL = "https://691afc5f2d8d78557570fd5c.mockapi.i/myapi/"
     private val json = Json { ignoreUnknownKeys = true }
 
     val instance: ApiService by lazy {

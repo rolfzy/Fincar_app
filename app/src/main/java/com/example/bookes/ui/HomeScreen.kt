@@ -231,7 +231,6 @@ fun HomeTitle() {
 
     }
 }
-
 @Composable
 fun HomeFilterTabs() {
     var selectedIndexTab by remember { mutableStateOf(0) }
